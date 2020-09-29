@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel='stylesheet' href='style.css' />
+  <script src='main.js' defer></script>
   <title>Notes</title>
 </head>
 <body>
-  
+  <header>
+    <h1> Notes App</h1>
+  </header>
+  <form id='noteForm' >
+    <div class='input-field'>
+      <label for='noteInput'></label> 
+      <input id='noteInput' type='text' />
+    </div>
+  <section>
+    <button id='submit-button' type='submit'>Add Note</button>
+  </section>
+  </form>
+  <section class='notesList'>
+    <ul id='notesList'></ul>
+  </section>
 </body>
 </html>
