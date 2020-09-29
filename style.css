@@ -1,0 +1,30 @@
+#notesList {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.note-card {
+    text-align: center;
+    justify-content: center;
+    margin: 10px;
+    border: 1px solid black;
+    background-image: linear-gradient( rgba(248, 248, 58, 0.9), rgba(240, 240, 180, 0.9));
+}
+
+p { 
+    width: 200px;
+    padding: 40px 20px;
+    margin: 5px;
+}
+
+#noteInput {
+    height: 30px;
+    width: 300px;
+    padding: 5px;
+    margin: 20px 10px;
+}
+
+#submit-button {
+    padding: 10px;
+    margin: 10px 10px;
+}
