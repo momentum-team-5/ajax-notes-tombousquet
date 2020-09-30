@@ -5,7 +5,7 @@ document.addEventListener('submit', function (event) {
     createNote()
 })
 
-function renderNotesList () {
+function renderNotesList() {
     fetch(url)
         .then(res => res.json())
         .then(notes => {
@@ -14,9 +14,7 @@ function renderNotesList () {
                     console.log(note)
                 addedNote = document.createElement('div')
                     addedNote.classList.add('note-card')
-                const noteText = document.createElement('p')
-                    addedNote.appendChild(noteText)
-                    noteText.innerText = note.noteItem
+                    addedNote.innerText = note.noteItem
                 notesList.appendChild(addedNote)
                 }
             })
@@ -34,16 +32,49 @@ function createNote() {
         })
     })
         .then(res => res.json())
-        .then(data => {
+        .then(note => {
             const notesList = document.querySelector('#notesList')
             const addedNote = document.createElement('div')
                 addedNote.classList.add('note-card')
-            const noteText = document.createElement('p')
-                addedNote.appendChild(noteText)
-                noteText.innerText = data.noteItem
+                addedNote.innerText = note.noteItem
             notesList.appendChild(addedNote)
         })
     }
-    
-    renderNotesList()
 
+renderNotesList()
+
+function existingNote() {
+const notesList = document.querySelector('#notesList')
+buttonSection = document.querySelector('#buttonSection')
+
+notesList.addEventListener('click', function (event) {
+    console.log(event.target)
+    editButton = document.createElement('button')
+        editButton.classList.add('edit')
+        editButton.innerText = 'Edit'
+        buttonSection.appendChild(editButton)
+    deleteButton = document.createElement('button')
+        deleteButton.classList.add('delete')
+        deleteButton.innerText = 'Delete'
+        buttonSection.appendChild(deleteButton)
+//space to call delete and edit functions        
+})
+}
+
+existingNote()
+
+// function editNote() {
+
+// }
+
+
+// function deleteNote (noteId) {
+//     fetch (url + '/' + noteId, {
+//         method: 'DELETE'
+//     })
+//         .then(res => res.json())
+//         .then(data => {
+//             //const noteToRemove = document.querySelector()
+//             noteToRemove.remove()
+//         })
+//}
