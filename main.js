@@ -13,6 +13,7 @@ function renderNotesList() {
                 for (let note of notes) {
                     console.log(note)
                 addedNote = document.createElement('div')
+                    addedNote.dataset.id = note.id
                     addedNote.classList.add('note-card')
                     addedNote.innerText = note.noteItem
                 notesList.appendChild(addedNote)
@@ -45,7 +46,7 @@ renderNotesList()
 
 function existingNote() {
 const notesList = document.querySelector('#notesList')
-buttonSection = document.querySelector('#buttonSection')
+const buttonSection = document.querySelector('#buttonSection')
 
 notesList.addEventListener('click', function (event) {
     console.log(event.target)
@@ -63,18 +64,39 @@ notesList.addEventListener('click', function (event) {
 
 existingNote()
 
-// function editNote() {
+function editNote(noteId) {
+    fetch (url + ':' + noteId, {
+        method: 'PATCH'
+    })
+        .then(res => res.json())
+        .then(data => {
+            const noteToEdit = document.querySelector(`li[data-id='${noteId}']`)
+            noteToEdit()
+        })
 
-// }
+}
 
 
-// function deleteNote (noteId) {
-//     fetch (url + '/' + noteId, {
-//         method: 'DELETE'
-//     })
-//         .then(res => res.json())
-//         .then(data => {
-//             //const noteToRemove = document.querySelector()
-//             noteToRemove.remove()
-//         })
-//}
+function deleteNote (noteId) {
+    fetch (url + '/' + noteId, {
+        method: 'DELETE'
+    })
+        .then(res => res.json())
+        .then(data => {
+            const noteToRemove = document.querySelector(`li[data-id='${noteId}']`)
+            noteToRemove.remove()
+        })
+}
+
+const buttonSection = document.querySelector('#buttonSection')
+
+buttonSection.addEventListener('submit', function (event){
+    if (event.target.matches('delete')){
+        console.log(event.target.parentElement.dataset.id)
+        deleteNote(event.target.parentElement.dataset.id)
+    }
+    if (event.target.matches('edit')){
+        console.log(event.target.parentElement.dataset.id)
+        editNote(event.target.parentElement.dataset.id)
+    }
+})
