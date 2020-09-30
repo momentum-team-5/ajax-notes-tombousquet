@@ -1,8 +1,23 @@
 const url = 'http://localhost:3000/notes'
+const notesList = document.querySelector('#notesList')
+const buttonSection = document.querySelector('#buttonSection')
+const editButton = document.createElement('button')
+let deleteButton = document.createElement('button')
 
 document.addEventListener('submit', function (event) {
     event.preventDefault()
     createNote()
+})
+
+notesList.addEventListener('click', function (event) {
+    if (event.target.matches('.delete')) {
+        console.log(event.target.parentElement.dataset.id)
+        deleteNote(event.target.parentElement.dataset.id)
+    }
+    if (event.target.matches('.edit')) {
+        console.log(event.target.parentElement.dataset.id)
+        editNote(event.target.parentElement.dataset.id)
+    }
 })
 
 function renderNotesList() {
@@ -11,58 +26,45 @@ function renderNotesList() {
         .then(notes => {
             let notesList = document.querySelector('#notesList')
                 for (let note of notes) {
-                    console.log(note)
-                addedNote = document.createElement('div')
-                    addedNote.dataset.id = note.id
-                    addedNote.classList.add('note-card')
-                    addedNote.innerText = note.noteItem
-                notesList.appendChild(addedNote)
+                    renderNoteItem(note)
                 }
             })
         }
 
-function createNote() {
+function renderNoteItem (note) {
     const noteInput = document.querySelector('#noteInput').value
-    console.log(noteInput)
+    const notesList = document.querySelector('#notesList')
+        let addedNote = document.createElement('div')
+            addedNote.dataset.id = note.id
+            addedNote.id = `item-${note.id}`
+            addedNote.classList.add('note-card')
+            addedNote.innerText = note.noteItem
+            notesList.appendChild(addedNote)
+        let editButton = document.createElement('button')
+            editButton.classList.add('edit')
+            editButton.innerText = 'Edit'
+            addedNote.appendChild(editButton)
+        let deleteButton = document.createElement('button')
+            deleteButton.classList.add('delete')
+            deleteButton.innerText = 'Delete'
+            addedNote.appendChild(deleteButton)
+        }
 
+function createNote() {
+    const noteInputField = document.querySelector('#noteInput')
     fetch(url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            noteItem: noteInput,
+            noteItem: noteInputField.value,
         })
     })
         .then(res => res.json())
         .then(note => {
-            const notesList = document.querySelector('#notesList')
-            const addedNote = document.createElement('div')
-                addedNote.classList.add('note-card')
-                addedNote.innerText = note.noteItem
-            notesList.appendChild(addedNote)
+            noteInputField.value = ''
+            renderNoteItem(note)
         })
     }
-
-renderNotesList()
-
-function existingNote() {
-const notesList = document.querySelector('#notesList')
-const buttonSection = document.querySelector('#buttonSection')
-
-notesList.addEventListener('click', function (event) {
-    console.log(event.target)
-    editButton = document.createElement('button')
-        editButton.classList.add('edit')
-        editButton.innerText = 'Edit'
-        buttonSection.appendChild(editButton)
-    deleteButton = document.createElement('button')
-        deleteButton.classList.add('delete')
-        deleteButton.innerText = 'Delete'
-        buttonSection.appendChild(deleteButton)
-//space to call delete and edit functions        
-})
-}
-
-existingNote()
 
 function editNote(noteId) {
     fetch (url + ':' + noteId, {
@@ -70,12 +72,11 @@ function editNote(noteId) {
     })
         .then(res => res.json())
         .then(data => {
-            const noteToEdit = document.querySelector(`li[data-id='${noteId}']`)
-            noteToEdit()
+            const noteToEdit = document.querySelector(`#item-${noteId}`)
+            
         })
 
 }
-
 
 function deleteNote (noteId) {
     fetch (url + '/' + noteId, {
@@ -83,20 +84,9 @@ function deleteNote (noteId) {
     })
         .then(res => res.json())
         .then(data => {
-            const noteToRemove = document.querySelector(`li[data-id='${noteId}']`)
+            const noteToRemove = document.querySelector(`#item-${noteId}`)
             noteToRemove.remove()
         })
 }
 
-const buttonSection = document.querySelector('#buttonSection')
-
-buttonSection.addEventListener('submit', function (event){
-    if (event.target.matches('delete')){
-        console.log(event.target.parentElement.dataset.id)
-        deleteNote(event.target.parentElement.dataset.id)
-    }
-    if (event.target.matches('edit')){
-        console.log(event.target.parentElement.dataset.id)
-        editNote(event.target.parentElement.dataset.id)
-    }
-})
+renderNotesList()
