@@ -3,6 +3,7 @@ const notesList = document.querySelector('#notesList')
 const buttonSection = document.querySelector('#buttonSection')
 const editButton = document.createElement('button')
 let deleteButton = document.createElement('button')
+let noteToEdit
 
 document.addEventListener('submit', function (event) {
     event.preventDefault()
@@ -17,6 +18,7 @@ notesList.addEventListener('click', function (event) {
     if (event.target.matches('.edit')) {
         console.log(event.target.parentElement.dataset.id)
         editNote(event.target.parentElement.dataset.id)
+        deleteNote(event.target.parentElement.dataset.id)
     }
 })
 
@@ -68,15 +70,18 @@ function createNote() {
 
 function editNote(noteId) {
     fetch (url + ':' + noteId, {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            noteItem: noteInput.value
+        })
     })
         .then(res => res.json())
-        .then(data => {
+        .then(data => console.log(data)) 
             const noteToEdit = document.querySelector(`#item-${noteId}`)
-            
-        })
+            createNote()
+        }
 
-}
 
 function deleteNote (noteId) {
     fetch (url + '/' + noteId, {
